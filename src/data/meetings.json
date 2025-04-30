@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "title": "Tech Talk: Future of AI",
+        "speaker": "John Doe",
+        "thumbnail": "https://picsum.photos/id/1011/200/150",
+        "link": "https://meet.google.com/abc-defg-hij",
+        "date": "2025-04-29",
+        "startTime": "09:00",
+        "endTime": "10:30"
+    },
+    {
+        "id": 2,
+        "title": "Marketing Strategy 2025",
+        "speaker": "Emily Clark",
+        "thumbnail": "https://picsum.photos/id/1012/200/150",
+        "link": "https://zoom.us/j/987654321",
+        "date": "2025-04-30",
+        "startTime": "14:00",
+        "endTime": "15:00"
+    },
+    {
+        "id": 3,
+        "title": "Design Sprint Workshop",
+        "speaker": "Michael Lee",
+        "thumbnail": "https://picsum.photos/id/1015/200/150",
+        "link": "https://meet.google.com/xyz-abc-def",
+        "date": "2025-05-01",
+        "startTime": "11:30",
+        "endTime": "13:00"
+    },
+    {
+        "id": 4,
+        "title": "Monthly Company All Hands",
+        "speaker": "Sarah Johnson",
+        "thumbnail": "https://picsum.photos/id/1016/200/150",
+        "link": "https://zoom.us/j/123123123",
+        "date": "2025-04-29",
+        "startTime": "16:00",
+        "endTime": "17:30"
+    },
+    {
+        "id": 5,
+        "title": "Cloud Computing Trends",
+        "speaker": "David Kim",
+        "thumbnail": "https://picsum.photos/id/1018/200/150",
+        "link": "https://meet.google.com/mno-pqr-stu",
+        "date": "2025-04-30",
+        "startTime": "13:00",
+        "endTime": "14:30"
+    },
+    {
+        "id": 6,
+        "title": "UX Research Insights",
+        "speaker": "Anna Bell",
+        "thumbnail": "https://picsum.photos/id/1021/200/150",
+        "link": "https://zoom.us/j/456456456",
+        "date": "2025-05-01",
+        "startTime": "15:30",
+        "endTime": "17:00"
+    }
+]
