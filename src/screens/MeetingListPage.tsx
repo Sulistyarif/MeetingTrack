@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useMeetingStore } from '../stores/UseMeetingStore';
 import Thumbnail from '../components/Thumbnail';
 import CustomSnackbar from '../components/CustomSnacbar';
+import ConfirmModal from '../components/ConfirmModal';
+import { set } from '@gluestack-style/react';
 
 const meetingsJson: Meeting[] = meetingsData;
 
@@ -15,9 +17,11 @@ const MeetingListPage = () => {
     const navigation = useNavigation();
     const addMeeting = useMeetingStore((state) => state.addMeeting);
     const setSelectedMeeting = useMeetingStore((state) => state.setSelectedMeeting);
+    const selectedMeeting = useMeetingStore((state) => state.selectedMeeting);
     const resetMeetings = useMeetingStore((state) => state.resetMeetings);
     const meetings = useMeetingStore((state) => state.meetings);
     const [refreshing, setRefreshing] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     // Snackbar
     const [visibleAlert, setVisibleAlert] = useState(false);
@@ -55,7 +59,10 @@ const MeetingListPage = () => {
 
     const renderItem = ({ item }: { item: Meeting }) => {
         return (
-            <TouchableOpacity onPress={() => onItemTapped(item)} onLongPress={() => onLongTapped(item)}
+            <TouchableOpacity onPress={() => {
+                setSelectedMeeting(item);
+                setShowConfirm(true);
+            }} onLongPress={() => onLongTapped(item)}
                 delayLongPress={300} style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', marginVertical: 10, padding: 10, borderWidth: 0.2, borderRadius: 15 }}>
                     <Thumbnail uri={item.thumbnail} style={{ width: 100, height: 100, borderRadius: 10 }} />
@@ -87,6 +94,7 @@ const MeetingListPage = () => {
     }
 
     const onItemTapped = async (item: Meeting) => {
+        console.log('Tapped item:', item);
         try {
             const supported = await Linking.canOpenURL(item.link);
 
@@ -142,6 +150,17 @@ const MeetingListPage = () => {
                         message={snackbarMessage}
                         onDismiss={onDismissSnackBarAlert}
                         backgroundColor="#f00" // optional
+                    />
+                    <ConfirmModal
+                        visible={showConfirm}
+                        message="This action will bring you join to the meeting. Do you want to continue?"
+                        onConfirm={() => {
+                            if (selectedMeeting) {
+                                onItemTapped(selectedMeeting);
+                            }
+                            setShowConfirm(false);
+                        }}
+                        onCancel={() => setShowConfirm(false)}
                     />
                 </View>
             </SafeAreaView>
