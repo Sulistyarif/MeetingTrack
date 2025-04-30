@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -8,6 +8,8 @@ import CustomSnackbar from '../components/CustomSnacbar'
 import { useMeetingStore } from '../stores/UseMeetingStore'
 import { Meeting } from '../models/Meetings'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { formatMeetingDateSimple } from '../utils/dateTimeHelpers'
 
 const CreateMeetingPage = () => {
     const navigation = useNavigation();
@@ -21,6 +23,10 @@ const CreateMeetingPage = () => {
     const [date, setDate] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+    const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+
 
     // Snackbar
     const [visibleSuccess, setVisibleSuccess] = useState(false);
@@ -77,7 +83,6 @@ const CreateMeetingPage = () => {
                 <KeyboardAwareScrollView style={styles.container}>
                     <View style={{ marginBottom: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            {/* <Icon name="chevron-left" size={40} color="#000" onPress={() => navigation.navigate('CreateMeeting' as never)} /> */}
                             <Text style={styles.titleText}>New Meeting</Text>
                         </View>
                         <Icon name="check" size={40} color="#000" onPress={onSaveTapped} />
@@ -113,28 +118,75 @@ const CreateMeetingPage = () => {
                     <View style={{ marginTop: 15 }} />
                     <Text style={styles.formLabel}>Date</Text>
                     <View style={{ marginBottom: 10 }} />
-                    <InputField
-                        placeholder="Enter date"
-                        value={date}
-                        onChangeText={setDate} />
+                    <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputField}>
+                        <Text style={{ color: date ? '#000' : '#aaa' }}>
+                            {date ? formatMeetingDateSimple(date) : 'Enter date'}
+                        </Text>
+                    </TouchableOpacity>
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={new Date()}
+                            mode="date"
+                            display="default"
+                            onChange={(_, selectedDate) => {
+                                setShowDatePicker(false);
+                                if (selectedDate) {
+                                    const d = selectedDate.toISOString().split('T')[0]; // yyyy-mm-dd
+                                    setDate(d);
+                                }
+                            }}
+                        />
+                    )}
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 1 }}>
                             <View style={{ marginTop: 15 }} />
                             <Text style={styles.formLabel}>Start Time</Text>
                             <View style={{ marginBottom: 10 }} />
-                            <InputField
-                                placeholder="Enter start time"
-                                value={startTime}
-                                onChangeText={setStartTime} />
+                            <TouchableOpacity onPress={() => setShowStartTimePicker(true)} style={styles.inputField}>
+                                <Text style={{ color: startTime ? '#000' : '#aaa' }}>
+                                    {startTime || 'Enter start time'}
+                                </Text>
+                            </TouchableOpacity>
+                            {showStartTimePicker && (
+                                <DateTimePicker
+                                    value={new Date()}
+                                    mode="time"
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={(_, selectedTime) => {
+                                        setShowStartTimePicker(false);
+                                        if (selectedTime) {
+                                            const time = selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                            setStartTime(time);
+                                        }
+                                    }}
+                                />
+                            )}
                         </View>
                         <View style={{ flex: 1, marginLeft: 5 }}>
                             <View style={{ marginTop: 15 }} />
                             <Text style={styles.formLabel}>End Time</Text>
                             <View style={{ marginBottom: 10 }} />
-                            <InputField
-                                placeholder="Enter end time"
-                                value={endTime}
-                                onChangeText={setEndTime} />
+                            <TouchableOpacity onPress={() => setShowEndTimePicker(true)} style={styles.inputField}>
+                                <Text style={{ color: endTime ? '#000' : '#aaa' }}>
+                                    {endTime || 'Enter end time'}
+                                </Text>
+                            </TouchableOpacity>
+                            {showEndTimePicker && (
+                                <DateTimePicker
+                                    value={new Date()}
+                                    mode="time"
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={(_, selectedTime) => {
+                                        setShowEndTimePicker(false);
+                                        if (selectedTime) {
+                                            const time = selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                            setEndTime(time);
+                                        }
+                                    }}
+                                />
+                            )}
                         </View>
                     </View>
                     <CustomSnackbar
@@ -179,6 +231,12 @@ const styles = StyleSheet.create({
     formLabel: {
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    inputField: {
+        backgroundColor: '#e5e5e5',
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 10,
     }
 })
 

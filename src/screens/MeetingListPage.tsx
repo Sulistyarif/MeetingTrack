@@ -1,4 +1,4 @@
-import { FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState } from 'react'
 import { Meeting } from '../models/Meetings'
@@ -9,12 +9,12 @@ import { useMeetingStore } from '../stores/UseMeetingStore';
 import Thumbnail from '../components/Thumbnail';
 import CustomSnackbar from '../components/CustomSnacbar';
 import ConfirmModal from '../components/ConfirmModal';
-import { set } from '@gluestack-style/react';
 
 const meetingsJson: Meeting[] = meetingsData;
 
 const MeetingListPage = () => {
     const navigation = useNavigation();
+    const screenWidth = Dimensions.get('window').width;
     const addMeeting = useMeetingStore((state) => state.addMeeting);
     const setSelectedMeeting = useMeetingStore((state) => state.setSelectedMeeting);
     const selectedMeeting = useMeetingStore((state) => state.selectedMeeting);
@@ -51,6 +51,8 @@ const MeetingListPage = () => {
         titleItem: {
             fontSize: 20,
             fontWeight: 'bold',
+            flexShrink: 1,
+            maxWidth: screenWidth * 0.55,
         },
         speakerText: {
             fontSize: 15,
@@ -68,7 +70,8 @@ const MeetingListPage = () => {
                     <Thumbnail uri={item.thumbnail} style={{ width: 100, height: 100, borderRadius: 10 }} />
                     <View style={{ marginHorizontal: 10, justifyContent: 'center' }} />
                     <View>
-                        <Text style={styles.titleItem}>{item.title}</Text>
+                        <Text style={styles.titleItem} numberOfLines={1}
+                            ellipsizeMode="tail">{item.title}</Text>
                         <View style={{ marginVertical: 2 }} />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Icon name="account" size={20} color="#000" />
