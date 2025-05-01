@@ -24,7 +24,7 @@ const InputField: React.FC<Props> = ({
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
-                placeholderTextColor="#8F8989"
+                placeholderTextColor="#90A4AE"
                 value={value}
                 onChangeText={onChangeText}
                 secureTextEntry={secureTextEntry}

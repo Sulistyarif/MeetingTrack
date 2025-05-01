@@ -1,7 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native'
 import InputField from '../components/InputField'
 import CustomSnackbar from '../components/CustomSnacbar'
@@ -10,6 +9,7 @@ import { Meeting } from '../models/Meetings'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatMeetingDateSimple } from '../utils/dateTimeHelpers'
+import ConfirmModal from '../components/ConfirmModal'
 
 const CreateMeetingPage = () => {
     const navigation = useNavigation();
@@ -26,7 +26,7 @@ const CreateMeetingPage = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
+    const [showConfirm, setShowConfirm] = useState(false);
 
     // Snackbar
     const [visibleSuccess, setVisibleSuccess] = useState(false);
@@ -40,21 +40,7 @@ const CreateMeetingPage = () => {
             showSnackbarAlert('Please complete all fields!');
             return;
         }
-
-        const newMeeting = {
-            id: Date.now(),
-            title,
-            speaker,
-            thumbnail,
-            link,
-            date,
-            startTime,
-            endTime,
-        } as Meeting;
-
-        addMeeting(newMeeting);
-        showSnackbarSuccess('Meeting created successfully!');
-        navigation.goBack();
+        setShowConfirm(true)
     };
 
     // Snackbar action
@@ -82,42 +68,42 @@ const CreateMeetingPage = () => {
             <SafeAreaView style={styles.safeAreaContainer}>
                 <KeyboardAwareScrollView style={styles.container}>
                     <View style={{ marginBottom: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.titleText}>New Meeting</Text>
-                        </View>
-                        <Icon name="check" size={40} color="#000" onPress={onSaveTapped} />
+                        <Text style={styles.titleText}>New Meeting</Text>
+                        <TouchableOpacity style={styles.saveButton} onPress={onSaveTapped}>
+                            <Text style={styles.saveButtonText}>Save</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ marginTop: 20 }} />
                     <Text style={styles.formLabel}>Title</Text>
-                    <View style={{ marginBottom: 10 }} />
+                    <View style={{ marginBottom: 4 }} />
                     <InputField
                         placeholder="Enter meeting title"
                         value={title}
                         onChangeText={setTitle} />
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{ marginTop: 12 }} />
                     <Text style={styles.formLabel}>Speaker</Text>
-                    <View style={{ marginBottom: 10 }} />
+                    <View style={{ marginBottom: 4 }} />
                     <InputField
                         placeholder="Enter speaker name"
                         value={speaker}
                         onChangeText={setSpeaker} />
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{ marginTop: 12 }} />
                     <Text style={styles.formLabel}>Thumbnail</Text>
-                    <View style={{ marginBottom: 10 }} />
+                    <View style={{ marginBottom: 4 }} />
                     <InputField
                         placeholder="Enter thumbnail URL"
                         value={thumbnail}
                         onChangeText={setThumbnail} />
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{ marginTop: 12 }} />
                     <Text style={styles.formLabel}>Link</Text>
-                    <View style={{ marginBottom: 10 }} />
+                    <View style={{ marginBottom: 4 }} />
                     <InputField
                         placeholder="Enter meeting link"
                         value={link}
                         onChangeText={setLink} />
-                    <View style={{ marginTop: 15 }} />
+                    <View style={{ marginTop: 12 }} />
                     <Text style={styles.formLabel}>Date</Text>
-                    <View style={{ marginBottom: 10 }} />
+                    <View style={{ marginBottom: 4 }} />
                     <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputField}>
                         <Text style={{ color: date ? '#000' : '#aaa' }}>
                             {date ? formatMeetingDateSimple(date) : 'Enter date'}
@@ -139,9 +125,9 @@ const CreateMeetingPage = () => {
                     )}
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 1 }}>
-                            <View style={{ marginTop: 15 }} />
+                            <View style={{ marginTop: 12 }} />
                             <Text style={styles.formLabel}>Start Time</Text>
-                            <View style={{ marginBottom: 10 }} />
+                            <View style={{ marginBottom: 4 }} />
                             <TouchableOpacity onPress={() => setShowStartTimePicker(true)} style={styles.inputField}>
                                 <Text style={{ color: startTime ? '#000' : '#aaa' }}>
                                     {startTime || 'Enter start time'}
@@ -164,9 +150,9 @@ const CreateMeetingPage = () => {
                             )}
                         </View>
                         <View style={{ flex: 1, marginLeft: 5 }}>
-                            <View style={{ marginTop: 15 }} />
+                            <View style={{ marginTop: 12 }} />
                             <Text style={styles.formLabel}>End Time</Text>
-                            <View style={{ marginBottom: 10 }} />
+                            <View style={{ marginBottom: 4 }} />
                             <TouchableOpacity onPress={() => setShowEndTimePicker(true)} style={styles.inputField}>
                                 <Text style={{ color: endTime ? '#000' : '#aaa' }}>
                                     {endTime || 'Enter end time'}
@@ -201,6 +187,28 @@ const CreateMeetingPage = () => {
                         onDismiss={onDismissSnackBarAlert}
                         backgroundColor="#f00" // optional
                     />
+                    <ConfirmModal
+                        visible={showConfirm}
+                        message="Are you sure you want to create this meeting?"
+                        onConfirm={() => {
+                            setShowConfirm(false);
+                            const newMeeting = {
+                                id: Date.now(),
+                                title,
+                                speaker,
+                                thumbnail,
+                                link,
+                                date,
+                                startTime,
+                                endTime,
+                            } as Meeting;
+
+                            addMeeting(newMeeting);
+                            showSnackbarSuccess('Meeting created successfully!');
+                            navigation.goBack();
+                        }}
+                        onCancel={() => setShowConfirm(false)}
+                    />
                 </KeyboardAwareScrollView>
             </SafeAreaView>
         </View>
@@ -220,6 +228,7 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 30,
         fontWeight: 'bold',
+        color: '#0097A7',
     },
     titleItem: {
         fontSize: 20,
@@ -229,15 +238,28 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     formLabel: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
+        color: '#212121',
     },
     inputField: {
         backgroundColor: '#e5e5e5',
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,
-    }
+    },
+    saveButton: {
+        backgroundColor: '#007C91',
+        borderRadius: 24,
+        paddingHorizontal: 10,
+        alignItems: 'center',
+        marginTop: 15,
+    },
+    saveButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '600',
+    },
 })
 
 export default CreateMeetingPage

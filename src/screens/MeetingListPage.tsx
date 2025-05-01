@@ -47,15 +47,18 @@ const MeetingListPage = () => {
         titleText: {
             fontSize: 30,
             fontWeight: 'bold',
+            color: '#0097A7',
         },
         titleItem: {
             fontSize: 20,
             fontWeight: 'bold',
             flexShrink: 1,
             maxWidth: screenWidth * 0.55,
+            color: '#0097A7',
         },
         speakerText: {
             fontSize: 15,
+            color: '#757575',
         }
     })
 
@@ -66,29 +69,29 @@ const MeetingListPage = () => {
                 setShowConfirm(true);
             }} onLongPress={() => onLongTapped(item)}
                 delayLongPress={300} style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row', marginVertical: 10, padding: 10, borderWidth: 0.2, borderRadius: 15 }}>
-                    <Thumbnail uri={item.thumbnail} style={{ width: 100, height: 100, borderRadius: 10 }} />
+                <View style={{ flexDirection: 'row', marginVertical: 10, padding: 10, borderWidth: 0, borderRadius: 15, backgroundColor: '#F3FFFC', elevation: 1 }}>
+                    <Thumbnail uri={item.thumbnail} style={{ width: 100, height: 100, borderRadius: 15 }} />
                     <View style={{ marginHorizontal: 10, justifyContent: 'center' }} />
                     <View>
                         <Text style={styles.titleItem} numberOfLines={1}
                             ellipsizeMode="tail">{item.title}</Text>
                         <View style={{ marginVertical: 2 }} />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Icon name="account" size={20} color="#000" />
+                            <Icon name="account" size={20} color="#9E9E9E" />
                             <View style={{ marginHorizontal: 5 }} />
                             <Text style={styles.speakerText}>{item.speaker}</Text>
                         </View>
                         <View style={{ marginVertical: 2 }} />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Icon name="calendar" size={20} color="#000" />
+                            <Icon name="calendar" size={20} color="#9E9E9E" />
                             <View style={{ marginHorizontal: 5 }} />
-                            <Text>{formatMeetingDate(item.date)}</Text>
+                            <Text style={styles.speakerText}>{formatMeetingDate(item.date)}</Text>
                         </View>
                         <View style={{ marginVertical: 2 }} />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Icon name="clock-time-eight-outline" size={20} color="#000" />
+                            <Icon name="clock-time-eight-outline" size={20} color="#9E9E9E" />
                             <View style={{ marginHorizontal: 5 }} />
-                            <Text>{item.startTime} - {item.endTime}</Text>
+                            <Text style={styles.speakerText}>{item.startTime} - {item.endTime}</Text>
                         </View>
                     </View>
                 </View>
@@ -142,7 +145,7 @@ const MeetingListPage = () => {
                 <View style={styles.container}>
                     <View style={{ marginTop: 10, marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.titleText}>Meeting Track</Text>
-                        <Icon name="plus" size={40} color="#000" onPress={() => navigation.navigate('CreateMeeting' as never)} />
+                        <Icon name="plus" size={40} color="#007C91" onPress={() => navigation.navigate('CreateMeeting' as never)} />
                     </View>
                     <View style={{ marginVertical: 10 }} />
                     <FlatList data={meetings} renderItem={renderItem} showsVerticalScrollIndicator={false} refreshing={refreshing}

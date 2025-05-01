@@ -45,24 +45,24 @@ const styles = StyleSheet.create({
     container: {
         width: 280,
         backgroundColor: '#fff',
-        borderRadius: 10,
+        borderRadius: 15,
         padding: 20,
         elevation: 4,
     },
     message: {
         fontSize: 16,
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 15,
     },
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
     },
     button: {
-        paddingVertical: 10,
+        paddingVertical: 5,
         paddingHorizontal: 25,
         backgroundColor: '#1976D2',
-        borderRadius: 5,
+        borderRadius: 15,
     },
     buttonText: {
         color: '#fff',
