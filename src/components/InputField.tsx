@@ -8,6 +8,8 @@ type Props = {
     style?: ViewStyle;
     label?: string;
     secureTextEntry?: boolean;
+    placeholderTextColor?: string;
+    inputBackgroundColor?: string;
 };
 
 const InputField: React.FC<Props> = ({
@@ -17,20 +19,22 @@ const InputField: React.FC<Props> = ({
     style,
     label,
     secureTextEntry = false,
+    placeholderTextColor = '#90A4AE',
+    inputBackgroundColor = '#90A4AE',
 }) => (
     <View style={[styles.wrapper, style]}>
         {label && <Text style={styles.label}>{label}</Text>}
         <View style={styles.inputWrapper}>
             <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: inputBackgroundColor }]}
                 placeholder={placeholder}
-                placeholderTextColor="#90A4AE"
+                placeholderTextColor={placeholderTextColor}
                 value={value}
                 onChangeText={onChangeText}
                 secureTextEntry={secureTextEntry}
             />
         </View>
-    </View>
+    </View >
 );
 
 const styles = StyleSheet.create({
@@ -45,7 +49,6 @@ const styles = StyleSheet.create({
     inputWrapper: {
         borderRadius: 12,
         overflow: 'hidden',
-        backgroundColor: '#f3eefc',
         borderWidth: 0,
         borderColor: '#aaa',
     },
@@ -54,7 +57,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         fontSize: 16,
         color: '#000',
-        backgroundColor: '#E0E0E0',
     },
 });
 

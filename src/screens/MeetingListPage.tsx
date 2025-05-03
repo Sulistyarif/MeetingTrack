@@ -9,6 +9,8 @@ import { useMeetingStore } from '../stores/UseMeetingStore';
 import Thumbnail from '../components/Thumbnail';
 import CustomSnackbar from '../components/CustomSnacbar';
 import ConfirmModal from '../components/ConfirmModal';
+import { FAB } from 'react-native-paper';
+import InputField from '../components/InputField';
 
 const meetingsJson: Meeting[] = meetingsData;
 
@@ -23,6 +25,12 @@ const MeetingListPage = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
+    // Search actions
+    const [showSearch, setShowSearch] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
+
+
     // Snackbar
     const [visibleAlert, setVisibleAlert] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -33,6 +41,21 @@ const MeetingListPage = () => {
             meetingsData.forEach((meeting) => addMeeting(meeting));
         }
     }, []);
+
+    useEffect(() => {
+        if (searchText.trim() === '') {
+            setFilteredMeetings(meetings);
+        } else {
+            const keyword = searchText.toLowerCase();
+            setFilteredMeetings(
+                meetings.filter(m =>
+                    m.title.toLowerCase().includes(keyword) ||
+                    m.speaker.toLowerCase().includes(keyword)
+                )
+            );
+        }
+    }, [searchText, meetings]);
+
 
     const styles = StyleSheet.create({
         safeAreaContainer: {
@@ -145,11 +168,45 @@ const MeetingListPage = () => {
                 <View style={styles.container}>
                     <View style={{ marginTop: 10, marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.titleText}>Meeting Track</Text>
-                        <Icon name="plus" size={40} color="#007C91" onPress={() => navigation.navigate('CreateMeeting' as never)} />
+                        <TouchableOpacity
+                            onPress={() => {
+                                setSearchText('');
+                                setShowSearch(curr => !curr);
+                            }}
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 20,
+                                backgroundColor: '#00BCD4',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Icon name="magnify" size={28} color="#fff" />
+                        </TouchableOpacity>
                     </View>
                     <View style={{ marginVertical: 10 }} />
-                    <FlatList data={meetings} renderItem={renderItem} showsVerticalScrollIndicator={false} refreshing={refreshing}
+                    {showSearch && (
+                        <InputField
+                            placeholder="Search Meetings"
+                            value={searchText}
+                            onChangeText={text => setSearchText(text)}
+                            inputBackgroundColor="#F4F4FF"
+                        />
+                    )}
+                    <FlatList data={filteredMeetings} renderItem={renderItem} showsVerticalScrollIndicator={false} refreshing={refreshing}
                         onRefresh={onRefresh}
+                    />
+                    <FAB
+                        icon="plus"
+                        style={{
+                            position: 'absolute',
+                            right: 10,
+                            bottom: 20,
+                            backgroundColor: '#00BCD4',
+                        }}
+                        color="#fff"
+                        onPress={() => navigation.navigate('CreateMeeting' as never)}
                     />
                     <CustomSnackbar
                         visible={visibleAlert}
