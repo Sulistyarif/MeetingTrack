@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState } from 'react'
 import { Meeting } from '../models/Meetings'
@@ -30,6 +30,9 @@ const MeetingListPage = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
 
+    // filter
+    const platforms = ['All', 'Zoom', 'Google Meet'];
+    const [selectedPlatform, setSelectedPlatform] = useState('All');
 
     // Snackbar
     const [visibleAlert, setVisibleAlert] = useState(false);
@@ -43,19 +46,25 @@ const MeetingListPage = () => {
     }, []);
 
     useEffect(() => {
-        if (searchText.trim() === '') {
-            setFilteredMeetings(meetings);
-        } else {
+        let results = meetings;
+
+        // Platform filter
+        if (selectedPlatform !== 'All') {
+            results = results.filter(m => m.platform?.toLowerCase() === selectedPlatform.toLowerCase());
+        }
+
+        // Search filter
+        if (searchText.trim() !== '') {
             const keyword = searchText.toLowerCase();
-            setFilteredMeetings(
-                meetings.filter(m =>
-                    m.title.toLowerCase().includes(keyword) ||
-                    m.speaker.toLowerCase().includes(keyword)
-                )
+            results = results.filter(m =>
+                m.title.toLowerCase().includes(keyword) ||
+                m.speaker.toLowerCase().includes(keyword)
             );
         }
-    }, [searchText, meetings]);
 
+        console.log('Filtered results:', results);
+        setFilteredMeetings(results);
+    }, [searchText, selectedPlatform, meetings]);
 
     const styles = StyleSheet.create({
         safeAreaContainer: {
@@ -194,8 +203,28 @@ const MeetingListPage = () => {
                             inputBackgroundColor="#F4F4FF"
                         />
                     )}
+                    <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                        {platforms.map((platform) => {
+                            const isActive = selectedPlatform === platform;
+                            return (
+                                <TouchableOpacity
+                                    key={platform}
+                                    onPress={() => setSelectedPlatform(platform)}
+                                    style={{
+                                        paddingHorizontal: 16,
+                                        paddingVertical: 8,
+                                        marginRight: 10,
+                                        borderRadius: 20,
+                                        backgroundColor: isActive ? '#007C91' : '#eeeeee',
+                                    }}
+                                >
+                                    <Text style={{ color: isActive ? '#fff' : '#666666' }}>{platform}</Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </View>
                     <FlatList data={filteredMeetings} renderItem={renderItem} showsVerticalScrollIndicator={false} refreshing={refreshing}
-                        onRefresh={onRefresh}
+                        onRefresh={onRefresh} keyExtractor={(item) => item.id.toString()}
                     />
                     <FAB
                         icon="plus"

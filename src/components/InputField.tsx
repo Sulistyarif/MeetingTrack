@@ -20,7 +20,7 @@ const InputField: React.FC<Props> = ({
     label,
     secureTextEntry = false,
     placeholderTextColor = '#90A4AE',
-    inputBackgroundColor = '#90A4AE',
+    inputBackgroundColor = '#E5E5E5',
 }) => (
     <View style={[styles.wrapper, style]}>
         {label && <Text style={styles.label}>{label}</Text>}

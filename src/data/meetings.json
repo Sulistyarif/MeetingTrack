@@ -7,7 +7,8 @@
         "link": "https://meet.google.com/abc-defg-hij",
         "date": "2025-04-29",
         "startTime": "09:00",
-        "endTime": "10:30"
+        "endTime": "10:30",
+        "platform": "Google Meet"
     },
     {
         "id": 2,
@@ -17,7 +18,8 @@
         "link": "https://zoom.us/j/987654321",
         "date": "2025-04-30",
         "startTime": "14:00",
-        "endTime": "15:00"
+        "endTime": "15:00",
+        "platform": "Zoom"
     },
     {
         "id": 3,
@@ -27,7 +29,8 @@
         "link": "https://meet.google.com/xyz-abc-def",
         "date": "2025-05-01",
         "startTime": "11:30",
-        "endTime": "13:00"
+        "endTime": "13:00",
+        "platform": "Google Meet"
     },
     {
         "id": 4,
@@ -37,7 +40,8 @@
         "link": "https://zoom.us/j/123123123",
         "date": "2025-04-29",
         "startTime": "16:00",
-        "endTime": "17:30"
+        "endTime": "17:30",
+        "platform": "Zoom"
     },
     {
         "id": 5,
@@ -47,7 +51,8 @@
         "link": "https://meet.google.com/mno-pqr-stu",
         "date": "2025-04-30",
         "startTime": "13:00",
-        "endTime": "14:30"
+        "endTime": "14:30",
+        "platform": "Google Meet"
     },
     {
         "id": 6,
@@ -57,6 +62,7 @@
         "link": "https://zoom.us/j/456456456",
         "date": "2025-05-01",
         "startTime": "15:30",
-        "endTime": "17:00"
+        "endTime": "17:00",
+        "platform": "Zoom"
     }
 ]
